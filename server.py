@@ -5,7 +5,7 @@ import thread
 
 
 def clientthread(conn, addr):
-    conn.send("Welcome to this chatroom!")
+    conn.send("Welcome to the chatroom!")
     while True:
             try:
                 message = conn.recv(2048)
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server.bind((ip, port))
-    server.listen(100)  # Listens for, at most, 100 active connections.
+    server.listen(12)  # Listens for, at most, 12 active connections.
 
     clients = []
 
