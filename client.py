@@ -4,16 +4,22 @@ import socket
 import select
 import sys
 
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-if len(sys.argv) != 3:
-    print("Correct usage: script, IP address, port number")
-    raise SystemExit
 
-IP_address = str(sys.argv[1])
-Port = int(sys.argv[2])
-server.connect((IP_address, Port))
+ip = "127.0.0.1"
+port = 6665
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.connect((ip, port))
 
 while True:
+    """ There are two possible input situations. Either the user wants to give
+    manual input to send to other people, or the server is sending a message to
+    be printed on the screen. Select returns from sockets_list, the stream that
+    is reader for input. For example, if the server wants to send a message,
+    then the if condition will hold true below. If the user wants to send a
+    message, the else condition will evaluate as true.
+    """
+
     sockets_list = [sys.stdin, server]
     read_sockets, write_socket, error_socket = select.select(sockets_list, [], [])
 
