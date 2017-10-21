@@ -9,8 +9,7 @@ def prompt():
     sys.stdout.write(">".format(uname))
     sys.stdout.flush()
 
-
-ip = "127.0.0.1"
+ip = raw_input("Server IP: ")
 port = 6665
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -32,6 +31,7 @@ while True:
             msg = sock.recv(2048)
             if not msg:
                 print("Disconnected from server")
+                server.close()
                 raise SystemExit
             else:
                 print(msg)
@@ -41,5 +41,3 @@ while True:
             # msg = raw_input()
             server.send("{}|{}".format(uname, msg[:-1]))
             prompt()
-
-server.close()
