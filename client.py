@@ -6,21 +6,26 @@ import sys
 
 
 def prompt():
-    sys.stdout.write("<{}> ".format(uname))
+    sys.stdout.write(">".format(uname))
     sys.stdout.flush()
 
-
-uname = raw_input("Last name: ")
 
 ip = "127.0.0.1"
 port = 6665
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.connect((ip, port))
+try:
+    server.connect((ip, port))
+except:
+    print("Unable to connect to server")
+    raise SystemExit
+
+print("Connected to server at {}:{}".format(ip, port))
+uname = raw_input("Last name: ")
 
 while True:
-    sockets_list = [sys.stdin, server]
-    read_sock, write_sock, err_sock = select.select(sockets_list, [], [])
+    socket_list = [sys.stdin, server]
+    read_sock, write_sock, err_sock = select.select(socket_list, [], [])
 
     for sock in read_sock:
         if sock == server:
@@ -33,7 +38,8 @@ while True:
                 prompt()
         else:
             msg = sys.stdin.readline()
-            server.send(msg)
+            # msg = raw_input()
+            server.send("{}|{}".format(uname, msg[:-1]))
             prompt()
 
 server.close()

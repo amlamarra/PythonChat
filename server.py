@@ -2,29 +2,38 @@
 
 import socket
 import thread
+from datetime import datetime
 
 
 def clientthread(conn, addr):
     conn.send("Welcome to the chatroom!")
+    f = open("chat.log", "a", 0)
     while True:
             try:
                 message = conn.recv(2048)
+                msg = message.split("|")[1]
+                uname = message.split("|")[0]
                 if message:
-                    print("<{}> {}".format(addr[0], message))
-                    message_to_send = "<{}> {}".format(addr[0], message)
+                    timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.now())
+                    line = "{}|{}|{}> {}".format(timestamp, addr[0], uname, msg)
+                    print(line)
+                    f.write(line + "\n")
+                    message_to_send = "{}> {}".format(uname, msg)
                     # Prints the address of the client & the message
                     broadcast(message_to_send, conn)
                 else:
+                    f.close()
                     remove(conn)
             except:
                 continue
+    f.close()
 
 
-def broadcast(message, connection):
+def broadcast(msg, connection):
     for client in clients:
         if client != connection:
             try:
-                client.send(message)
+                client.send(msg)
             except:
                 client.close()
                 remove(client)
@@ -44,6 +53,7 @@ if __name__ == "__main__":
     server.bind((ip, port))
     server.listen(12)  # Listens for, at most, 12 active connections.
 
+    print("Chat server started on port {}".format(port))
     clients = []
 
     while True:
