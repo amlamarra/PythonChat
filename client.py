@@ -42,6 +42,5 @@ while True:
                 prompt()
         else:
             msg = sys.stdin.readline()
-            # msg = raw_input()
             server.send("{}|{}".format(uname, msg[:-1]))
             prompt()
