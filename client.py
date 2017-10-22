@@ -1,4 +1,8 @@
 #!/usr/bin/env python2
+""" A Python chatroom client
+Author: Lt Andrew Lamarra
+Date:   21 OCTOBER 2017
+"""
 
 import socket
 import select
